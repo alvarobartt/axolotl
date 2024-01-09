@@ -1,0 +1,72 @@
+base_model: microsoft/phi-2
+model_type: AutoModelForCausalLM
+tokenizer_type: AutoTokenizer
+trust_remote_code: true
+
+load_in_8bit: false
+load_in_4bit: false
+strict: false
+
+rl: true
+datasets:
+  - path: argilla/ultrafeedback-binarized-preferences-cleaned
+    type: apply_phi2_to_argilla_ultrafeedback
+dataset_prepared_path:
+val_set_size: 0.0
+output_dir: ./phi-2-dpo-out/
+hub_model_id: alvarobartt/phi-2-dpo
+
+sequence_len: 2048
+sample_packing: false
+pad_to_sequence_len: false
+
+adapter:
+lora_model_dir:
+lora_r:
+lora_alpha:
+lora_dropout:
+lora_target_linear:
+lora_fan_in_fan_out:
+
+wandb_project: phi-2-dpo
+wandb_entity: alvarobartt
+wandb_watch:
+wandb_name:
+wandb_log_model:
+
+gradient_accumulation_steps: 1
+micro_batch_size: 1
+num_epochs: 4
+optimizer: paged_adamw_8bit
+adam_beta2: 0.95
+adam_epsilon: 0.00001
+max_grad_norm: 1.0
+lr_scheduler: cosine
+learning_rate: 1e-5
+
+train_on_inputs: false
+group_by_length: false
+bf16: true
+fp16: false
+tf32: true
+
+gradient_checkpointing: true
+early_stopping_patience:
+resume_from_checkpoint:
+local_rank:
+logging_steps: 1
+xformers_attention:
+flash_attention: true
+
+warmup_steps: 100
+evals_per_epoch: 4
+saves_per_epoch: 1
+debug:
+deepspeed: deepspeed/zero3_bf16.json
+weight_decay: 0.1
+fsdp:
+fsdp_config:
+resize_token_embeddings_to_32x: true
+save_safetensors: true
+special_tokens:
+  pad_token: "<|endoftext|>"

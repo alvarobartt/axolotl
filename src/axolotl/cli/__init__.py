@@ -355,6 +355,16 @@ def load_rl_datasets(
         sample["rejected"] = f"{sample['rejected_response']}<|im_end|>"
         return sample
 
+    def apply_phi2_to_argilla_ultrafeedback(sample):
+        sample["prompt"] = f"Instruct: {sample['prompt']}\nOutput:"
+        sample["chosen"] = next(
+            (x for x in sample["chosen"] if x.get("role") == "assistant"), None
+        )
+        sample["rejected"] = next(
+            (x for x in sample["rejected"] if x.get("role") == "assistant"), None
+        )
+        return sample
+
     def intel_apply_chatml(sample):  # pylint: disable=possibly-unused-variable
         if "system" in sample and sample["system"]:
             sample["prompt"] = (
