@@ -10,6 +10,7 @@ strict: false
 rl: true
 datasets:
   - path: argilla/ultrafeedback-binarized-preferences-cleaned
+    split: train
     type: apply_phi2_to_argilla_ultrafeedback
 dataset_prepared_path:
 val_set_size: 0.0
